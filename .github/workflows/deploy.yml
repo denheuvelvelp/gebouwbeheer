@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   test:
@@ -56,3 +57,4 @@ jobs:
             --set-env-vars APPS_SCRIPT_URL="${{ secrets.APPS_SCRIPT_URL }}",RELAY_SECRET="${{ secrets.RELAY_SECRET }}" \
             --min-instances 0 \
             --max-instances 2
+
