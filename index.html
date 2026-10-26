@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Den Heuvel Gebouwbeheer - Portaal & Storingen</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-layout">
+    
+    <!-- Vaste Navigatie (Sidebar) -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-header">
+        <h1 class="brand-title">DEN HEUVEL</h1>
+        <div class="brand-subtitle">Gebouwbeheer</div>
+      </div>
+
+      <div class="nav-section-title">Werkplek Intern</div>
+      <nav>
+        <ul class="nav-list">
+          <li>
+            <a class="nav-item" data-view="dashboard">
+              <div class="nav-item-content">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item active" data-view="actielijst">
+              <div class="nav-item-content">
+                <span class="nav-icon">📋</span>
+                <span>Actielijst</span>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a class="nav-item" data-view="storingen">
+              <div class="nav-item-content">
+                <span class="nav-icon">⚠️</span>
+                <span>Storingen</span>
+              </div>
+              <span class="nav-item-badge" id="sidebarStoringenBadge">...</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="nav-section-title">Publiek Portaal</div>
+      <nav>
+        <ul class="nav-list">
+          <li>
+            <a class="nav-item" data-view="publiek">
+              <div class="nav-item-content">
+                <span class="nav-icon">🌐</span>
+                <span>Bewoners /melden</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="sidebar-footer-title">Google Workspace</div>
+        <div class="sidebar-footer-sub">Fundament & Opslag v2.1</div>
+      </div>
+    </aside>
+
+    <!-- Hoofdvenster -->
+    <div class="main-wrapper">
+      
+      <!-- Topbar -->
+      <header class="topbar">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Menu openen">☰</button>
+          <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="searchInput" placeholder="Zoek melding, actie, locatie of melder…" autocomplete="off">
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <!-- Live Verbindingsstatus -->
+          <div class="connection-status-pill" id="connectionPill" title="Verbinding met de Den Heuvel Testadministratie">
+            <span class="status-dot"></span>
+            <span id="connectionText">Verbinden...</span>
+          </div>
+
+          <!-- Sessie / Rolkiezer voor testen van autorisatie -->
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <select id="sessionUserSelect" class="filter-select" style="font-size: 11.5px; padding: 4px 8px;" title="Wissel gesimuleerde sessie om rechten te testen">
+              <option value="huismeester1@denheuvelvelp.nl">👤 Huismeester 1</option>
+              <option value="huismeester2@denheuvelvelp.nl">👤 Huismeester 2</option>
+              <option value="bestuur@denheuvelvelp.nl">👤 Bestuur</option>
+              <option value="onbevoegd">⛔ Onbevoegd (test)</option>
+            </select>
+          </div>
+
+          <div class="user-profile">
+            <div class="user-info">
+              <div class="user-name" id="topbarUserName">Huismeester 1</div>
+              <div class="user-role" id="topbarUserRole">Den Heuvel</div>
+            </div>
+            <div class="user-avatar" id="topbarUserAvatar" title="Actieve sessie">H1</div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Prototype & Verbindingsstatus Melding -->
+      <div class="prototype-banner">
+        <div>
+          <strong>Testomgeving met actieve opslag</strong> · Webinterface verbonden via Gateway en HMAC-beveiligde verwerking. Wijzigingen worden bewaard in de centrale administratie.
+        </div>
+        <button class="btn btn-secondary btn-sm" id="btnTestVerbindingsproef" style="font-size: 11px; padding: 3px 8px;" title="Voer de cryptografische HMAC-relayproef uit">
+          ⚡ Verbindingsproef uitvoeren
+        </button>
+      </div>
+
+      <!-- ========================================================
+           VIEW 1: KANBAN ACTIELIJST
+           ======================================================== -->
+      <section class="view-section active-view" id="viewActielijst">
+        <main class="content-area">
+          
+          <div class="page-header-row">
+            <div class="page-title-block">
+              <div class="badge-row">
+                <span class="badge">Actieve Opslag</span>
+                <span class="header-path">Voorgesteld: beheer.denheuvelvelp.nl / beheer / acties</span>
+              </div>
+              <h1 class="page-title">Actielijst</h1>
+              <p class="page-subtitle">Samen plannen en opvolgen met een overzichtelijk Kanban-bord</p>
+            </div>
+
+            <button class="btn btn-primary" id="btnNewAction">
+              <span>+</span>
+              <span>Nieuwe actie</span>
+            </button>
+          </div>
+
+          <!-- Filter- en werkbalk -->
+          <div class="filters-toolbar">
+            <div class="filter-group">
+              <div class="filter-pills">
+                <button class="filter-pill active" id="filterPillAlle">Alle acties</button>
+                <button class="filter-pill" id="filterPillMijn">Mijn acties</button>
+              </div>
+
+              <div class="filter-select-wrapper">
+                <span>Eigenaar:</span>
+                <select class="filter-select" id="filterOwner">
+                  <option value="alle">Alle</option>
+                  <option value="Huismeester 1">Huismeester 1</option>
+                  <option value="Huismeester 2">Huismeester 2</option>
+                  <option value="Bestuur">Bestuur</option>
+                </select>
+              </div>
+
+              <div class="filter-select-wrapper">
+                <span>Prioriteit:</span>
+                <select class="filter-select" id="filterPriority">
+                  <option value="alle">Alle</option>
+                  <option value="Hoog">Hoog</option>
+                  <option value="Normaal">Normaal</option>
+                  <option value="Laag">Laag</option>
+                </select>
+              </div>
+
+              <div class="filter-select-wrapper">
+                <span>Deadline:</span>
+                <select class="filter-select" id="filterDeadline">
+                  <option value="alle">Alle</option>
+                  <option value="overdue">Verlopen</option>
+                  <option value="this_week">Komende 7 dagen</option>
+                  <option value="later">Later</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="reset-filters-btn" id="resetFiltersBtn">Filters herstellen</button>
+          </div>
+
+          <!-- Mobiele Kolomkiezer (Tabs) -->
+          <div class="mobile-column-tabs" id="mobileColumnTabs"></div>
+
+          <!-- Kanban Bord met 4 kolommen -->
+          <div class="kanban-board" id="kanbanBoard"></div>
+
+          <!-- Informatiekaart onderaan het bord -->
+          <section class="info-footer-card">
+            <h3 class="info-footer-title">Actie openen of toevoegen</h3>
+            <p class="info-footer-fields">Titel · omschrijving · eigenaar · prioriteit · deadline · labels · checklist · gekoppelde bron</p>
+            <p class="info-footer-help">Versleep een kaart of gebruik Verplaats naar. Wijzigingen worden met versiecontrole opgeslagen in de test-Sheets administratie.</p>
+          </section>
+
+        </main>
+      </section>
+
+
+      <!-- ========================================================
+           VIEW 2: STORINGEN OVERZICHT (MELDINGENLIJST)
+           ======================================================== -->
+      <section class="view-section" id="viewStoringen">
+        <main class="content-area">
+          
+          <div class="page-header-row">
+            <div class="page-title-block">
+              <div class="badge-row">
+                <span class="badge">Actieve Opslag</span>
+                <span class="header-path">Voorgesteld: beheer.denheuvelvelp.nl / beheer / storingen</span>
+              </div>
+              <h1 class="page-title">Storingen en werkorders</h1>
+              <p class="page-subtitle">Meldingen registreren, prioriteren, werkorders plannen en storingen afhandelen</p>
+            </div>
+
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+              <button class="btn btn-secondary" id="btnNaarPubliekMeldformulier">
+                <span>🌐</span>
+                <span>Naar bewonersformulier</span>
+              </button>
+              <button class="btn btn-primary" id="btnNieuweStoring">
+                <span>+</span>
+                <span>Nieuwe storing melden</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- KPI Kaarten -->
+          <div class="kpi-cards-grid">
+            <div class="kpi-card">
+              <span class="kpi-card-label">Open meldingen</span>
+              <span class="kpi-card-value" id="kpiOpenMeldingen">...</span>
+              <span class="kpi-card-footnote">Actieve opslag in testadministratie</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-card-label">In uitvoering</span>
+              <span class="kpi-card-value" id="kpiInUitvoering">...</span>
+              <span class="kpi-card-footnote">Actieve opslag in testadministratie</span>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-card-label">Wacht op externe actie</span>
+              <span class="kpi-card-value" id="kpiWachtOpActie">...</span>
+              <span class="kpi-card-footnote">Actieve opslag in testadministratie</span>
+            </div>
+          </div>
+
+          <!-- Filterbalk voor storingen -->
+          <div class="filters-toolbar">
+            <div class="filter-group">
+              <div class="filter-select-wrapper">
+                <span>Status:</span>
+                <select class="filter-select" id="filterStoringStatus">
+                  <option value="alle">Alle statussen</option>
+                  <option value="Nieuw">Nieuw</option>
+                  <option value="Beoordeeld">Beoordeeld</option>
+                  <option value="Ingepland">Ingepland</option>
+                  <option value="In uitvoering">In uitvoering</option>
+                  <option value="Opgelost">Opgelost</option>
+                  <option value="Gesloten">Gesloten</option>
+                  <option value="met_wacht">Alleen met wachtreden</option>
+                </select>
+              </div>
+
+              <div class="filter-select-wrapper">
+                <span>Gebouw / Vleugel:</span>
+                <select class="filter-select" id="filterStoringGebouw">
+                  <option value="alle">Alle locaties</option>
+                  <option value="Noord">Noord</option>
+                  <option value="West">West</option>
+                  <option value="Zuid">Zuid</option>
+                </select>
+              </div>
+
+              <div class="filter-select-wrapper">
+                <span>Prioriteit:</span>
+                <select class="filter-select" id="filterStoringPrioriteit">
+                  <option value="alle">Alle</option>
+                  <option value="Hoog">Hoog</option>
+                  <option value="Normaal">Normaal</option>
+                  <option value="Laag">Laag</option>
+                </select>
+              </div>
+
+              <div class="filter-select-wrapper">
+                <span>Categorie:</span>
+                <select class="filter-select" id="filterStoringCategorie">
+                  <option value="alle">Alle categorieën</option>
+                  <option value="Deuren & Toegang">Deuren & Toegang</option>
+                  <option value="Verlichting & Elektra">Verlichting & Elektra</option>
+                  <option value="Lekkage & Loodgieter">Lekkage & Loodgieter</option>
+                  <option value="Lift">Lift</option>
+                  <option value="Intercom">Intercom</option>
+                  <option value="Algemeen & Schoonmaak">Algemeen & Schoonmaak</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="reset-filters-btn" id="resetStoringFiltersBtn">Filters herstellen</button>
+          </div>
+
+          <!-- Storingentabel -->
+          <div class="storingen-table-panel">
+            <div class="table-responsive">
+              <table class="storingen-table">
+                <thead>
+                  <tr>
+                    <th>Nummer</th>
+                    <th>Storing & Omschrijving</th>
+                    <th>Locatie</th>
+                    <th>Melder & Kanaal</th>
+                    <th>Prioriteit</th>
+                    <th>Status & Wachtreden</th>
+                    <th>Actie</th>
+                  </tr>
+                </thead>
+                <tbody id="storingenTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Informatiekaart -->
+          <section class="info-footer-card">
+            <h3 class="info-footer-title">Opvolging en historie van storingen</h3>
+            <p class="info-footer-fields">Alle kanalen (portaal, WhatsApp, mondeling) schrijven naar één centrale registratie.</p>
+            <p class="info-footer-help">Statusvolgorde: Nieuw → Beoordeeld → Ingepland → In uitvoering → Opgelost → Gesloten. Wachtreden wordt separaat vastgelegd.</p>
+          </section>
+
+        </main>
+      </section>
+
+
+      <!-- ========================================================
+           VIEW 3: STORING DETAILWEERGAVE
+           ======================================================== -->
+      <section class="view-section" id="viewStoringDetail">
+        <main class="content-area">
+          
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <button class="detail-nav-back" id="btnTerugNaarStoringen">
+              ← Terug naar storingenoverzicht
+            </button>
+            <span class="badge" id="detailBadgeId">...</span>
+          </div>
+
+          <div class="page-header-row">
+            <div class="page-title-block">
+              <h1 class="page-title" id="detailTitel">Storing</h1>
+              <p class="page-subtitle" id="detailSubtitel">...</p>
+            </div>
+
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-secondary" id="btnDetailNieuweWerkorder">
+                <span>🔧</span>
+                <span>Werkorder aanmaken</span>
+              </button>
+              <button class="btn btn-primary" id="btnDetailKoppelKanban">
+                <span>📋</span>
+                <span>Koppel actie aan Kanban</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Detailpagina Grid -->
+          <div class="detail-grid">
+            
+            <!-- Linker kolom -->
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+              <div class="detail-card">
+                <div class="detail-card-title">
+                  <span>Meldingsdetails</span>
+                  <span id="detailPrioPill"></span>
+                </div>
+
+                <div class="detail-field-group">
+                  <span class="detail-field-label">Locatie:</span>
+                  <span class="detail-field-value" id="detailLocatie">...</span>
+
+                  <span class="detail-field-label">Categorie:</span>
+                  <span class="detail-field-value" id="detailCategorie">...</span>
+
+                  <span class="detail-field-label">Melder:</span>
+                  <span class="detail-field-value" id="detailMelder">...</span>
+
+                  <span class="detail-field-label">Contact:</span>
+                  <span class="detail-field-value" id="detailContact">...</span>
+                </div>
+
+                <div>
+                  <div class="detail-field-label" style="margin-bottom: 6px;">Omschrijving van het probleem:</div>
+                  <div class="storing-description-box" id="detailOmschrijving">...</div>
+                </div>
+
+                <!-- Foto preview -->
+                <div>
+                  <div class="detail-field-label" style="margin-bottom: 6px;">Bijgevoegde foto / bijlage:</div>
+                  <div class="photo-preview-box">
+                    <div class="photo-placeholder">📷</div>
+                    <div>
+                      <strong style="font-size: 13px;" id="detailFotoNaam">Geen foto bijgevoegd</strong>
+                      <div style="font-size: 11px; color: var(--color-text-muted);">Drive-testopslag: afgeschermde map</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Voortgangshistorie -->
+              <div class="detail-card">
+                <div class="detail-card-title">
+                  <span>Voortgangshistorie & Notities</span>
+                  <span style="font-size: 12px; font-weight: normal; color: var(--color-text-muted);">Chronologisch logboek</span>
+                </div>
+
+                <div class="timeline-list" id="detailTimeline"></div>
+
+                <!-- Notitie toevoegen -->
+                <div style="display: flex; gap: 8px; margin-top: 10px; padding-top: 14px; border-top: 1px solid #edf2f7;">
+                  <input type="text" class="form-input" id="nieuweNotitieInput" placeholder="Interne notitie of update toevoegen..." style="flex: 1;">
+                  <button type="button" class="btn btn-secondary btn-sm" id="btnVoegNotitieToe">Toevoegen</button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Rechter kolom -->
+            <div style="display: flex; flex-direction: column; gap: 20px;">
+              
+              <!-- Statusbeheer Kaart -->
+              <div class="detail-card">
+                <div class="detail-card-title">Status & Toewijzing</div>
+                
+                <div class="form-group">
+                  <label class="form-label" for="detailSelectStatus">Status van de storing</label>
+                  <select class="form-select" id="detailSelectStatus">
+                    <option value="Nieuw">Nieuw</option>
+                    <option value="Beoordeeld">Beoordeeld</option>
+                    <option value="Ingepland">Ingepland</option>
+                    <option value="In uitvoering">In uitvoering</option>
+                    <option value="Opgelost">Opgelost</option>
+                    <option value="Gesloten">Gesloten</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="detailSelectWachtreden">Eventuele wachtreden</label>
+                  <select class="form-select" id="detailSelectWachtreden">
+                    <option value="">Geen (loopt normaal door)</option>
+                    <option value="Wacht op leverancier">Wacht op leverancier</option>
+                    <option value="Wacht op offerte">Wacht op offerte / goedkeuring</option>
+                    <option value="Wacht op onderdelen">Wacht op levering onderdelen</option>
+                    <option value="Wacht op bewoner">Wacht op reactie bewoner</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="detailSelectEigenaar">Verantwoordelijke huismeester</label>
+                  <select class="form-select" id="detailSelectEigenaar">
+                    <option value="Huismeester 1">Huismeester 1</option>
+                    <option value="Huismeester 2">Huismeester 2</option>
+                    <option value="Bestuur">Bestuur</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="detailInputStreefdatum">Streefdatum / Deadline</label>
+                  <input type="date" class="form-input" id="detailInputStreefdatum">
+                </div>
+
+                <button class="btn btn-primary" id="btnOpslaanStatusWijziging" style="width: 100%;">
+                  Status & planning bijwerken
+                </button>
+              </div>
+
+              <!-- Gekoppelde Kanban Actie -->
+              <div class="detail-card">
+                <div class="detail-card-title">Gekoppelde Kanban-actie</div>
+                <div id="detailGekoppeldeActieInhoud"></div>
+              </div>
+
+              <!-- Gekoppelde Werkorder -->
+              <div class="detail-card">
+                <div class="detail-card-title">Werkorder voor leverancier</div>
+                <div id="detailWerkorderInhoud"></div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </main>
+      </section>
+
+
+      <!-- ========================================================
+           VIEW 4: PUBLIEK BEWONERSFORMULIER (/MELDEN)
+           ======================================================== -->
+      <section class="view-section" id="viewPubliek">
+        <div class="public-view-wrapper">
+          <div class="public-container">
+            
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <button class="btn btn-secondary btn-sm" id="btnTerugVanPubliekNaarBeheer">
+                ← Terug naar intern beheerportaal
+              </button>
+              <span class="badge" style="background:#e0f2fe; color:#0369a1;">/melden (openbaar)</span>
+            </div>
+
+            <div class="public-header">
+              <div class="public-brand">DEN HEUVEL</div>
+              <div class="public-banner-tag">Schermontwerp · Testomgeving</div>
+              <h1 style="font-size: 26px; font-weight: 700; color: #102f46;">Een storing melden</h1>
+              <p style="font-size: 13px; color: #718494;">Vertel ons wat er aan de hand is. Je hebt geen inlogaccount nodig.</p>
+            </div>
+
+            <div class="public-card" id="publicFormCard">
+              <div class="public-stepper">
+                <span>1 Melding</span>
+                <span>2 Contact</span>
+                <span>3 Versturen</span>
+              </div>
+
+              <form id="publicReportForm" style="display: flex; flex-direction: column; gap: 16px;">
+                <div class="form-group">
+                  <label class="form-label" for="pubLocatie">Waar is de storing? *</label>
+                  <select class="form-select" id="pubLocatie" required>
+                    <option value="" disabled selected>Kies de locatie in Den Heuvel...</option>
+                    <option value="Noord · begane grond · entreedeur">Noord · Begane grond · Entreedeur</option>
+                    <option value="Noord · 2e verdieping hal">Noord · 2e verdieping hal</option>
+                    <option value="West · lift toren West">West · Lift toren West</option>
+                    <option value="West · promenade">West · Promenade</option>
+                    <option value="Zuid · parkeergarage">Zuid · Parkeergarage</option>
+                    <option value="Zuid · kelder">Zuid · Kelder</option>
+                    <option value="Buitenterrein · containerruimte">Buitenterrein · Containerruimte</option>
+                    <option value="Overig">Overig</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="pubCategorie">Wat voor soort storing is het?</label>
+                  <select class="form-select" id="pubCategorie">
+                    <option value="Deuren & Toegang">Deuren, sloten of toegang</option>
+                    <option value="Verlichting & Elektra">Verlichting of elektra</option>
+                    <option value="Lekkage & Loodgieter">Lekkage, water of afvoer</option>
+                    <option value="Lift">Liftstoring</option>
+                    <option value="Intercom">Intercom of bel</option>
+                    <option value="Algemeen & Schoonmaak">Schoonmaak of algemeen gebouw</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="pubProbleem">Wat is het probleem? *</label>
+                  <textarea class="form-textarea" id="pubProbleem" rows="3" required placeholder="Omschrijf duidelijk wat er mis is..."></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Foto toevoegen (niet verplicht)</label>
+                  <div style="border: 1px dashed #cbd5e1; background: #f8fafc; border-radius: var(--radius-sm); padding: 16px; text-align: center; cursor: pointer;" id="pubFotoUploadBox">
+                    <div style="font-size: 24px; margin-bottom: 4px;">📷</div>
+                    <span style="font-size: 12.5px; color: #475569; font-weight: 500;" id="pubFotoTekst">+ Selecteer of maak een foto</span>
+                    <input type="file" id="pubFotoInput" style="display: none;" accept="image/*">
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="pubNaam">Jouw naam *</label>
+                    <input type="text" class="form-input" id="pubNaam" required placeholder="Bijv. M. Jansen">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="pubHuisnummer">Appartement / huisnr *</label>
+                    <input type="text" class="form-input" id="pubHuisnummer" required placeholder="Bijv. 14C">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="pubContact">E-mailadres of telefoonnummer *</label>
+                  <input type="text" class="form-input" id="pubContact" required placeholder="Om je op de hoogte te houden">
+                </div>
+
+                <div class="public-notice">
+                  ⚠️ <strong>Let op bij acute spoed:</strong> Bij brand, direct gevaar of ernstige waterlekkage volg je direct de vastgestelde spoedinstructies van Den Heuvel en het alarmnummer.
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="btnVerzendPubliekMelding" style="padding: 12px; font-size: 14px;">
+                  Storing verzenden
+                </button>
+              </form>
+            </div>
+
+            <!-- Bevestigingskaart -->
+            <div class="public-card public-success-card" id="publicSuccessCard" style="display: none;">
+              <div class="public-success-icon">✓</div>
+              <h2 style="font-size: 20px; font-weight: 700; color: #102f46;">Bedankt voor je melding!</h2>
+              <p style="font-size: 13px; color: #64748b;">
+                Je storingsmelding is geregistreerd onder nummer <strong id="publicSuccessMeldingId" style="color:#087e8b;">...</strong>.
+              </p>
+              <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: var(--radius-sm); padding: 14px; text-align: left; width: 100%; font-size: 12.5px;">
+                De melding is opgeslagen in de centrale administratie. Onze huismeesters bekijken deze en plannen direct de opvolging in.
+              </div>
+              <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button type="button" class="btn btn-secondary" id="btnNogEenMelding">Nog een melding doen</button>
+                <button type="button" class="btn btn-primary" id="btnTerugNaarPortaalNaMelding">Bekijk in beheerportaal</button>
+              </div>
+            </div>
+
+            <div style="text-align: center; font-size: 11px; color: #8195a4;">
+              Centrale administratie · Veilig gescheiden van interne contact- en personeelsgegevens.
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- MODAL 1: KANBAN ACTIE -->
+  <div class="modal-overlay" id="actionModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-container">
+      <header class="modal-header">
+        <h2 class="modal-title" id="modalTitle">Nieuwe actie toevoegen</h2>
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="Sluiten">✕</button>
+      </header>
+
+      <form id="actionForm">
+        <div class="modal-body">
+          <input type="hidden" id="formRecordVersion" value="1">
+          <div class="form-group">
+            <label class="form-label" for="formTitle">Titel van de actie *</label>
+            <input type="text" class="form-input" id="formTitle" required placeholder="Bijv. Entree Noord controleren">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="formDescription">Omschrijving / toelichting</label>
+            <textarea class="form-textarea" id="formDescription" rows="3" placeholder="Wat moet er gebeuren, wat is de situatie?"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="formOwner">Verantwoordelijke</label>
+              <select class="form-select" id="formOwner">
+                <option value="Huismeester 1">Huismeester 1</option>
+                <option value="Huismeester 2">Huismeester 2</option>
+                <option value="Bestuur">Bestuur</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="formColumn">Kolom / Status</label>
+              <select class="form-select" id="formColumn">
+                <option value="todo">Te doen</option>
+                <option value="in_progress">In uitvoering</option>
+                <option value="waiting">Wacht</option>
+                <option value="done">Gereed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="formPriority">Prioriteit</label>
+              <select class="form-select" id="formPriority">
+                <option value="Hoog">Hoog</option>
+                <option value="Normaal" selected>Normaal</option>
+                <option value="Laag">Laag</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="formDeadline">Deadline</label>
+              <input type="date" class="form-input" id="formDeadline">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="formLabel">Label / Categorie</label>
+            <input type="text" class="form-input" id="formLabel" placeholder="Bijv. Inspectie, Veiligheid, Voorraad, Onderhoud">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Checklist</label>
+            <div class="checklist-builder">
+              <div class="checklist-items" id="checklistItems"></div>
+              <div class="add-check-row">
+                <input type="text" class="form-input" id="newChecklistInput" placeholder="Nieuw checklist-item toevoegen...">
+                <button type="button" class="btn btn-secondary btn-sm" id="addChecklistBtn">+ Toevoegen</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <footer class="modal-footer">
+          <button type="button" class="btn btn-danger btn-sm" id="modalDeleteBtn" style="display: none;">Archiveren</button>
+          <div class="modal-actions-right">
+            <button type="button" class="btn btn-secondary" id="modalCancelBtn">Annuleren</button>
+            <button type="submit" class="btn btn-primary" id="modalSaveBtn">Opslaan in administratie</button>
+          </div>
+        </footer>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- MODAL 2: INTERNE NIEUWE STORING MELDEN -->
+  <div class="modal-overlay" id="storingModal" role="dialog" aria-modal="true" aria-labelledby="storingModalTitle">
+    <div class="modal-container">
+      <header class="modal-header">
+        <h2 class="modal-title" id="storingModalTitle">Nieuwe storing registreren</h2>
+        <button class="modal-close-btn" id="storingModalCloseBtn" aria-label="Sluiten">✕</button>
+      </header>
+
+      <form id="storingForm">
+        <div class="modal-body">
+          
+          <div class="form-group">
+            <label class="form-label" for="storingFormTitel">Korte titel / storing *</label>
+            <input type="text" class="form-input" id="storingFormTitel" required placeholder="Bijv. Lekkage onderzocht kelder Zuid">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="storingFormLocatie">Locatie *</label>
+              <select class="form-select" id="storingFormLocatie" required>
+                <option value="Noord · begane grond · entreedeur">Noord · Begane grond · Entreedeur</option>
+                <option value="Noord · 2e verdieping hal">Noord · 2e verdieping hal</option>
+                <option value="West · lift toren West">West · Lift toren West</option>
+                <option value="West · promenade">West · Promenade</option>
+                <option value="Zuid · kelder">Zuid · Kelder</option>
+                <option value="Zuid · parkeergarage">Zuid · Parkeergarage</option>
+                <option value="Buitenterrein · containerruimte">Buitenterrein · Containerruimte</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="storingFormCategorie">Categorie *</label>
+              <select class="form-select" id="storingFormCategorie" required>
+                <option value="Deuren & Toegang">Deuren & Toegang</option>
+                <option value="Verlichting & Elektra">Verlichting & Elektra</option>
+                <option value="Lekkage & Loodgieter">Lekkage & Loodgieter</option>
+                <option value="Lift">Lift</option>
+                <option value="Intercom">Intercom</option>
+                <option value="Algemeen & Schoonmaak">Algemeen & Schoonmaak</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="storingFormOmschrijving">Uitgebreide omschrijving *</label>
+            <textarea class="form-textarea" id="storingFormOmschrijving" rows="3" required placeholder="Wat is de aard van de storing en welke impact heeft dit?"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="storingFormPrioriteit">Prioriteit</label>
+              <select class="form-select" id="storingFormPrioriteit">
+                <option value="Hoog">Hoog</option>
+                <option value="Normaal" selected>Normaal</option>
+                <option value="Laag">Laag</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="storingFormKanaal">Melding binnengekomen via</label>
+              <select class="form-select" id="storingFormKanaal">
+                <option value="Mondeling / Balie">Mondeling / Balie</option>
+                <option value="WhatsApp">WhatsApp</option>
+                <option value="E-mail">E-mail</option>
+                <option value="Inspectieronde">Inspectieronde huismeester</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="storingFormMelder">Melder naam / appartement</label>
+              <input type="text" class="form-input" id="storingFormMelder" placeholder="Bijv. Mw. De Jong (West 22B)">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="storingFormContact">Contactgegevens melder</label>
+              <input type="text" class="form-input" id="storingFormContact" placeholder="Telefoon of e-mail">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Foto / bestand (optioneel)</label>
+            <div style="border: 1px dashed #cbd5e1; background: #f8fafc; border-radius: var(--radius-sm); padding: 12px; text-align: center;">
+              <span style="font-size: 12px; color: #475569;" id="storingFotoLabel">📁 Selecteer een foto of rapport</span>
+              <input type="file" id="storingFormFotoInput" style="display: none;" accept="image/*,.pdf">
+              <button type="button" class="btn btn-secondary btn-sm" style="margin-left: 8px;" id="btnKiesFotoStoring">Bestand kiezen</button>
+            </div>
+          </div>
+
+        </div>
+
+        <footer class="modal-footer">
+          <div></div>
+          <div class="modal-actions-right">
+            <button type="button" class="btn btn-secondary" id="storingModalCancelBtn">Annuleren</button>
+            <button type="submit" class="btn btn-primary" id="btnStoringOpslaan">Storing opslaan in administratie</button>
+          </div>
+        </footer>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- MODAL 3: WERKORDER AANMAKEN -->
+  <div class="modal-overlay" id="werkorderModal" role="dialog" aria-modal="true" aria-labelledby="werkorderModalTitle">
+    <div class="modal-container">
+      <header class="modal-header">
+        <h2 class="modal-title" id="werkorderModalTitle">Werkorder voor leverancier aanmaken</h2>
+        <button class="modal-close-btn" id="werkorderModalCloseBtn" aria-label="Sluiten">✕</button>
+      </header>
+
+      <form id="werkorderForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="woLeverancier">Leverancier / Monteur *</label>
+            <input type="text" class="form-input" id="woLeverancier" required placeholder="Bijv. Firma Jansen Deurtechniek BV">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="woDatum">Geplande uitvoerdatum</label>
+              <input type="date" class="form-input" id="woDatum" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="woKosten">Geschatte kosten (€)</label>
+              <input type="number" class="form-input" id="woKosten" placeholder="Bijv. 250">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="woInstructie">Werkinstructie voor monteur</label>
+            <textarea class="form-textarea" id="woInstructie" rows="3" placeholder="Locatie van sleutels, contactpersoon op locatie, vereiste materialen..."></textarea>
+          </div>
+        </div>
+
+        <footer class="modal-footer">
+          <div></div>
+          <div class="modal-actions-right">
+            <button type="button" class="btn btn-secondary" id="werkorderModalCancelBtn">Annuleren</button>
+            <button type="submit" class="btn btn-primary" id="btnWerkorderOpslaan">Werkorder opslaan</button>
+          </div>
+        </footer>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- Toast container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

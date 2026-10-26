@@ -1,0 +1,1 @@
+Optionele hergeneratie van schermontwerpen. Vereist Python met reportlab, pymupdf en fc-match/DejaVu-lettertypen. Uitvoeren vanuit een tijdelijke omgeving; dit is geen applicatiecode.

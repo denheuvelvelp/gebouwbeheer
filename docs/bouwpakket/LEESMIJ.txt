@@ -1,0 +1,10 @@
+DEN HEUVEL BOUWPAKKET VERSIE 2.1
+
+Begin met Opdrachten_voor_Gemini.md. Dit bevat letterlijke opdrachten A t/m F plus hervat- en herstelopdracht.
+
+Bouwvolgorde: fundament > Kanban-actielijst > storingenbeheer > volgende modules.
+Geef eerst de volledige masterprompt; daarna per module de moduleprompt en het gelijknamige PNG-schermbeeld. Alleen een bestandsnaam noemen geeft Gemini geen toegang.
+
+Dit pakket bevat 62 functies, 23 moduleprompts en 25 schermontwerpen. Ontwerpmateriaal, geen bestaande werkende applicatie. Geen bewonersdata of secrets.
+
+Gebruik het bijgewerkte implementatiedocument voor scope, inrichting en controles.

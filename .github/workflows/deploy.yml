@@ -1,0 +1,58 @@
+name: CI/CD - Deploy to Google Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    name: Unittests & Acceptatieproeven
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code ophalen
+        uses: actions/checkout@v4
+
+      - name: Python instellen
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Voer unittests uit
+        run: |
+          python3 -m unittest tests/test_foundation.py
+
+  deploy:
+    name: Automatische Push naar Google Cloud Run
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: Code ophalen
+        uses: actions/checkout@v4
+
+      - name: Authenticeer met Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Google Cloud SDK instellen
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Bouw en Deploy naar Cloud Run
+        run: |
+          gcloud run deploy denheuvel-gateway \
+            --source . \
+            --region europe-west4 \
+            --platform managed \
+            --allow-unauthenticated \
+            --set-env-vars APPS_SCRIPT_URL="${{ secrets.APPS_SCRIPT_URL }}",RELAY_SECRET="${{ secrets.RELAY_SECRET }}" \
+            --min-instances 0 \
+            --max-instances 2

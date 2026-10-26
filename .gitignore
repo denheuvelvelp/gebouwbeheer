@@ -1,0 +1,17 @@
+# Secrets & Omgevingsvariabelen (NOOIT committen naar GitHub)
+.env
+.env.local
+.env.*.local
+
+# Python cache & tests
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Lokale testdata
+data/*.tmp
+
+# OS specifieke bestanden
+.DS_Store
+Thumbs.db

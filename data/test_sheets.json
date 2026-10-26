@@ -1,0 +1,683 @@
+{
+  "SchemaVersies": [
+    {
+      "id": "VER-001",
+      "versie": "2.1.0",
+      "aangemaakt_op": "2026-10-26T06:00:00Z",
+      "geïnstalleerd_door": "Systeem",
+      "omschrijving": "Initiële inrichting fundament, Kanban en Storingen"
+    }
+  ],
+  "Gebruikers": [
+    {
+      "id": "USR-001",
+      "email": "huismeester1@denheuvelvelp.nl",
+      "naam": "Huismeester 1",
+      "rol": "huismeester",
+      "actief": true,
+      "laatst_ingelogd": "2026-10-26T06:00:00Z",
+      "recordVersion": 1
+    },
+    {
+      "id": "USR-002",
+      "email": "huismeester2@denheuvelvelp.nl",
+      "naam": "Huismeester 2",
+      "rol": "huismeester",
+      "actief": true,
+      "laatst_ingelogd": "2026-10-26T06:00:00Z",
+      "recordVersion": 1
+    },
+    {
+      "id": "USR-003",
+      "email": "bestuur@denheuvelvelp.nl",
+      "naam": "Bestuur Den Heuvel",
+      "rol": "bestuur",
+      "actief": true,
+      "laatst_ingelogd": "2026-10-26T06:00:00Z",
+      "recordVersion": 1
+    }
+  ],
+  "Instellingen": [
+    {
+      "id": "SET-001",
+      "sleutel": "gebouw_naam",
+      "waarde": "Den Heuvel",
+      "omschrijving": "Naam van het complex",
+      "bijgewerkt_op": "2026-10-26T06:00:00Z"
+    },
+    {
+      "id": "SET-002",
+      "sleutel": "beheer_domein",
+      "waarde": "beheer.denheuvelvelp.nl",
+      "omschrijving": "Productiedomein",
+      "bijgewerkt_op": "2026-10-26T06:00:00Z"
+    },
+    {
+      "id": "SET-003",
+      "sleutel": "max_upload_mb",
+      "waarde": "10",
+      "omschrijving": "Maximale bestandsgrootte in MB",
+      "bijgewerkt_op": "2026-10-26T06:00:00Z"
+    }
+  ],
+  "BordKolommen": [
+    {
+      "kolom_id": "todo",
+      "titel": "Te doen",
+      "volgorde": 1,
+      "standaard_kolom": true,
+      "actief": true
+    },
+    {
+      "kolom_id": "in_progress",
+      "titel": "In uitvoering",
+      "volgorde": 2,
+      "standaard_kolom": true,
+      "actief": true
+    },
+    {
+      "kolom_id": "waiting",
+      "titel": "Wacht",
+      "volgorde": 3,
+      "standaard_kolom": true,
+      "actief": true
+    },
+    {
+      "kolom_id": "done",
+      "titel": "Gereed",
+      "volgorde": 4,
+      "standaard_kolom": true,
+      "actief": true
+    }
+  ],
+  "Locaties": [
+    {
+      "locatie_id": "LOC-N-BG-01",
+      "vleugel": "Noord",
+      "verdieping": "BG",
+      "omschrijving": "Noord · begane grond · entreedeur",
+      "publiek_zichtbaar": true
+    },
+    {
+      "locatie_id": "LOC-N-V2-01",
+      "vleugel": "Noord",
+      "verdieping": "2e verdieping",
+      "omschrijving": "Noord · 2e verdieping hal",
+      "publiek_zichtbaar": true
+    },
+    {
+      "locatie_id": "LOC-W-LIFT",
+      "vleugel": "West",
+      "verdieping": "Alle",
+      "omschrijving": "West · lift toren West",
+      "publiek_zichtbaar": true
+    },
+    {
+      "locatie_id": "LOC-W-PROM",
+      "vleugel": "West",
+      "verdieping": "BG",
+      "omschrijving": "West · promenade",
+      "publiek_zichtbaar": true
+    },
+    {
+      "locatie_id": "LOC-Z-KELD",
+      "vleugel": "Zuid",
+      "verdieping": "Kelder",
+      "omschrijving": "Zuid · kelder",
+      "publiek_zichtbaar": true
+    },
+    {
+      "locatie_id": "LOC-Z-PARK",
+      "vleugel": "Zuid",
+      "verdieping": "Kelder/BG",
+      "omschrijving": "Zuid · parkeergarage",
+      "publiek_zichtbaar": true
+    },
+    {
+      "locatie_id": "LOC-B-CONT",
+      "vleugel": "Buitenterrein",
+      "verdieping": "Terrein",
+      "omschrijving": "Buitenterrein · containerruimte",
+      "publiek_zichtbaar": true
+    }
+  ],
+  "Contacten": [
+    {
+      "contact_id": "CON-001",
+      "naam": "Dhr. Bakker",
+      "type": "Bewoner",
+      "appartement": "12A",
+      "telefoon": "06-12345678",
+      "email": "b.bakker@email.nl",
+      "notities": "Noord toren"
+    },
+    {
+      "contact_id": "CON-002",
+      "naam": "Mw. Van Dijk",
+      "type": "Bewoner",
+      "appartement": "Zuid 04",
+      "telefoon": "06-98765432",
+      "email": "vandijk@email.nl",
+      "notities": "Zuid vleugel"
+    },
+    {
+      "contact_id": "CON-003",
+      "naam": "Fam. Willems",
+      "type": "Bewoner",
+      "appartement": "West 31",
+      "telefoon": "06-11223344",
+      "email": "willems@denheuvelvelp.nl",
+      "notities": "West toren"
+    },
+    {
+      "contact_id": "CON-004",
+      "naam": "Firma Jansen Deurtechniek BV",
+      "type": "Leverancier",
+      "appartement": "-",
+      "telefoon": "026-3334455",
+      "email": "service@jansendeuren.nl",
+      "notities": "Onderhoudscontract deuren"
+    },
+    {
+      "contact_id": "CON-005",
+      "naam": "Loodgietersbedrijf De Boer Velp",
+      "type": "Leverancier",
+      "appartement": "-",
+      "telefoon": "026-4445566",
+      "email": "info@loodgieterdeboer.nl",
+      "notities": "Loodgieter"
+    }
+  ],
+  "Acties": [
+    {
+      "id": "ACT-001",
+      "title": "Entree Noord controleren",
+      "description": "Controleer de dranger en het elektronisch slot van de hoofdentree Noord. Bewoners meldden dat de deur soms op een kier blijft staan bij harde wind.",
+      "status": "todo",
+      "kolom_id": "todo",
+      "sorteervolgorde": 1,
+      "owner": "Huismeester 1",
+      "priority": "Hoog",
+      "deadline": "2026-11-02",
+      "label": "Inspectie",
+      "checklist": [
+        {
+          "text": "Deurdranger afstellen",
+          "done": true
+        },
+        {
+          "text": "Paslezer en magneetcontact controleren",
+          "done": false
+        },
+        {
+          "text": "Sluiting testen bij tocht",
+          "done": false
+        }
+      ],
+      "sourceType": "Storing",
+      "sourceId": "M-2026-0042",
+      "recordVersion": 1,
+      "createdAt": "2026-10-26T06:00:00Z",
+      "updatedAt": "2026-10-26T06:00:00Z",
+      "createdBy": "Huismeester 1",
+      "updatedBy": "Huismeester 1",
+      "archivedAt": ""
+    },
+    {
+      "id": "ACT-002",
+      "title": "Labelvoorraad aanvullen",
+      "description": "Bestelling plaatsen voor nieuwe brievenbus- en naambordjes voor de nieuwe bewoners in vleugel West.",
+      "status": "todo",
+      "kolom_id": "todo",
+      "sorteervolgorde": 2,
+      "owner": "Huismeester 2",
+      "priority": "Normaal",
+      "deadline": "2026-11-05",
+      "label": "Voorraad",
+      "checklist": [
+        {
+          "text": "Huidige voorraad tellen",
+          "done": false
+        },
+        {
+          "text": "Standaardformaat bestellen bij leverancier",
+          "done": false
+        },
+        {
+          "text": "Plaatsen in depot kast A",
+          "done": false
+        }
+      ],
+      "sourceType": "Handmatig",
+      "sourceId": "HANDMATIG-2",
+      "recordVersion": 1,
+      "createdAt": "2026-10-26T06:00:00Z",
+      "updatedAt": "2026-10-26T06:00:00Z",
+      "createdBy": "Huismeester 2",
+      "updatedBy": "Huismeester 2",
+      "archivedAt": ""
+    },
+    {
+      "id": "ACT-003",
+      "title": "Werkprocedure bijwerken",
+      "description": "Actualiseer de werkinstructie voor het inspecteren en vrijhouden van nooduitgangen conform de recente RI&E-bevindingen.",
+      "status": "in_progress",
+      "kolom_id": "in_progress",
+      "sorteervolgorde": 1,
+      "owner": "Huismeester 1",
+      "priority": "Normaal",
+      "deadline": "2026-11-04",
+      "label": "Veiligheid",
+      "checklist": [
+        {
+          "text": "Concepttekst doornemen",
+          "done": true
+        },
+        {
+          "text": "Afstemmen met bestuur",
+          "done": false
+        },
+        {
+          "text": "Plamineren en ophangen in werkruimte",
+          "done": false
+        }
+      ],
+      "sourceType": "Handmatig",
+      "sourceId": "HANDMATIG-3",
+      "recordVersion": 1,
+      "createdAt": "2026-10-26T06:00:00Z",
+      "updatedAt": "2026-10-26T06:00:00Z",
+      "createdBy": "Huismeester 1",
+      "updatedBy": "Huismeester 1",
+      "archivedAt": ""
+    },
+    {
+      "id": "ACT-004",
+      "title": "Leverancier terugbellen",
+      "description": "Contact opnemen met firma Jansen over de jaarlijkse liftkeuring in toren Zuid en de vervanging van de noodverlichting.",
+      "status": "in_progress",
+      "kolom_id": "in_progress",
+      "sorteervolgorde": 2,
+      "owner": "Huismeester 2",
+      "priority": "Hoog",
+      "deadline": "2026-11-03",
+      "label": "Onderhoud",
+      "checklist": [
+        {
+          "text": "Keuringsrapport erbij pakken",
+          "done": false
+        },
+        {
+          "text": "Datum bevestigen met liftmonteur",
+          "done": false
+        }
+      ],
+      "sourceType": "Handmatig",
+      "sourceId": "HANDMATIG-4",
+      "recordVersion": 1,
+      "createdAt": "2026-10-26T06:00:00Z",
+      "updatedAt": "2026-10-26T06:00:00Z",
+      "createdBy": "Huismeester 2",
+      "updatedBy": "Huismeester 2",
+      "archivedAt": ""
+    },
+    {
+      "id": "ACT-005",
+      "title": "Offerte deuronderhoud",
+      "description": "Vergelijkingsvoorstel opstellen voor het onderhoudscontract van de automatische schuifdeuren vleugel Oost en garage-entree.",
+      "status": "waiting",
+      "kolom_id": "waiting",
+      "sorteervolgorde": 1,
+      "owner": "Bestuur",
+      "priority": "Normaal",
+      "deadline": "2026-11-06",
+      "label": "Wacht op leverancier",
+      "checklist": [
+        {
+          "text": "Eerste offerte ontvangen",
+          "done": true
+        },
+        {
+          "text": "Tweede offerte controleren",
+          "done": false
+        },
+        {
+          "text": "Voorleggen in bestuursvergadering",
+          "done": false
+        }
+      ],
+      "sourceType": "Storing",
+      "sourceId": "M-2026-0040",
+      "recordVersion": 1,
+      "createdAt": "2026-10-26T06:00:00Z",
+      "updatedAt": "2026-10-26T06:00:00Z",
+      "createdBy": "Bestuur",
+      "updatedBy": "Bestuur",
+      "archivedAt": ""
+    },
+    {
+      "id": "ACT-006",
+      "title": "Ronde West afronden",
+      "description": "Wekelijkse controleronde vleugel West: verlichting, vluchtwegen en containerruimte gecontroleerd en schoongemaakt.",
+      "status": "done",
+      "kolom_id": "done",
+      "sorteervolgorde": 1,
+      "owner": "Huismeester 2",
+      "priority": "Normaal",
+      "deadline": "2026-10-24",
+      "label": "Afgerond",
+      "checklist": [
+        {
+          "text": "Trappenhuisverlichting gecontroleerd",
+          "done": true
+        },
+        {
+          "text": "Containerruimte nagelopen",
+          "done": true
+        },
+        {
+          "text": "Inspectielogboek afgetekend",
+          "done": true
+        }
+      ],
+      "sourceType": "Handmatig",
+      "sourceId": "HANDMATIG-6",
+      "recordVersion": 1,
+      "createdAt": "2026-10-26T06:00:00Z",
+      "updatedAt": "2026-10-26T06:00:00Z",
+      "createdBy": "Huismeester 2",
+      "updatedBy": "Huismeester 2",
+      "archivedAt": ""
+    }
+  ],
+  "ActieHistorie": [
+    {
+      "historie_id": "AH-001",
+      "actie_id": "ACT-001",
+      "wijziging_type": "AANGEMAAKT",
+      "oude_waarde": "",
+      "nieuwe_waarde": "todo",
+      "tijdstip": "2026-10-26T06:00:00Z",
+      "gewijzigd_door": "Huismeester 1"
+    }
+  ],
+  "Meldingen": [
+    {
+      "title": "Waterdruk laag op 4e etage",
+      "location": "Noord · 4e verdieping",
+      "category": "Lekkage & Loodgieter",
+      "description": "Er komt nauwelijks water uit de kranen.",
+      "channel": "Publiek portaal",
+      "reporter": "M. Jansen (14C)",
+      "contact": "06-11112222",
+      "id": "M-2026-0045",
+      "status": "Nieuw",
+      "recordVersion": 1,
+      "createdAt": "2026-10-26T06:24:28Z",
+      "updatedAt": "2026-10-26T06:24:28Z",
+      "createdBy": "M. Jansen (14C)",
+      "updatedBy": "M. Jansen (14C)"
+    },
+    {
+      "id": "M-2026-0042",
+      "title": "Entree sluit niet goed",
+      "location": "Noord · begane grond · entreedeur",
+      "category": "Deuren & Toegang",
+      "description": "De automatische entreedeur van toren Noord sluit traag en blijft af en toe op een kier van ca. 5 centimeter openstaan. Daardoor tocht het in de hal en is de nachtelijke toegang onveilig.",
+      "status": "Ingepland",
+      "waitingReason": "",
+      "priority": "Hoog",
+      "deadline": "2026-11-03",
+      "owner": "Huismeester 1",
+      "channel": "Publiek portaal",
+      "reporter": "Dhr. Bakker (Appartement 12A)",
+      "contact": "b.bakker@email.nl · 06-12345678",
+      "photo": "entreedeur_kier_noord.jpg",
+      "createdAt": "2026-10-26 08:30",
+      "linkedActionId": "ACT-001",
+      "recordVersion": 1,
+      "updatedAt": "2026-10-26T08:30:00Z",
+      "createdBy": "Dhr. Bakker",
+      "updatedBy": "Huismeester 1",
+      "archivedAt": ""
+    },
+    {
+      "id": "M-2026-0041",
+      "title": "Verlichting defect vleugel West",
+      "location": "West · promenade",
+      "category": "Verlichting & Elektra",
+      "description": "Drie opeenvolgende LED-armaturen op de promenade vleugel West knipperen of branden niet meer. Geeft een onveilig gevoel 's avonds.",
+      "status": "In uitvoering",
+      "waitingReason": "",
+      "priority": "Normaal",
+      "deadline": "2026-11-04",
+      "owner": "Huismeester 1",
+      "channel": "Inspectieronde",
+      "reporter": "Huismeester 1",
+      "contact": "Intern (huismeester@denheuvelvelp.nl)",
+      "photo": null,
+      "createdAt": "2026-10-25 16:45",
+      "linkedActionId": null,
+      "recordVersion": 1,
+      "updatedAt": "2026-10-25T16:45:00Z",
+      "createdBy": "Huismeester 1",
+      "updatedBy": "Huismeester 1",
+      "archivedAt": ""
+    },
+    {
+      "id": "M-2026-0040",
+      "title": "Lekkage onderzocht kelder Zuid",
+      "location": "Zuid · kelder",
+      "category": "Lekkage & Loodgieter",
+      "description": "Vochtplek en druppels waargenomen bij het leidingtracé nabij berging B-14 in de kelder van toren Zuid.",
+      "status": "Beoordeeld",
+      "waitingReason": "Wacht op leverancier",
+      "priority": "Normaal",
+      "deadline": "2026-11-06",
+      "owner": "Bestuur",
+      "channel": "Mondeling / Balie",
+      "reporter": "Mw. Van Dijk (Zuid 04)",
+      "contact": "06-98765432",
+      "photo": "kelder_lekkage.jpg",
+      "createdAt": "2026-10-24 11:20",
+      "linkedActionId": "ACT-005",
+      "recordVersion": 1,
+      "updatedAt": "2026-10-24T11:20:00Z",
+      "createdBy": "Huismeester 2",
+      "updatedBy": "Bestuur",
+      "archivedAt": ""
+    },
+    {
+      "id": "M-2026-0039",
+      "title": "Intercom ruis toren West",
+      "location": "West · lift toren West",
+      "category": "Intercom",
+      "description": "Bewoners van verdieping 3 melden dat het belsignaal wel overgaat, maar dat het gesprek nauwelijks verstaanbaar is door ernstige ruis.",
+      "status": "Nieuw",
+      "waitingReason": "",
+      "priority": "Laag",
+      "deadline": "2026-11-08",
+      "owner": "Huismeester 2",
+      "channel": "Publiek portaal",
+      "reporter": "Fam. Willems (West 31)",
+      "contact": "willems@denheuvelvelp.nl",
+      "photo": null,
+      "createdAt": "2026-10-26 07:15",
+      "linkedActionId": null,
+      "recordVersion": 1,
+      "updatedAt": "2026-10-26T07:15:00Z",
+      "createdBy": "Fam. Willems",
+      "updatedBy": "Fam. Willems",
+      "archivedAt": ""
+    },
+    {
+      "id": "M-2026-0038",
+      "title": "Graffiti zijmuur containerruimte",
+      "location": "Buitenterrein · containerruimte",
+      "category": "Algemeen & Schoonmaak",
+      "description": "Tags met zwarte spuitbus aangebracht op de betonnen zijmuur van de afvalopstelplaats.",
+      "status": "Gesloten",
+      "waitingReason": "",
+      "priority": "Normaal",
+      "deadline": "2026-10-25",
+      "owner": "Huismeester 2",
+      "channel": "WhatsApp",
+      "reporter": "Bewoner alert (06-55443322)",
+      "contact": "06-55443322",
+      "photo": null,
+      "createdAt": "2026-10-23 09:00",
+      "linkedActionId": null,
+      "recordVersion": 1,
+      "updatedAt": "2026-10-25T15:00:00Z",
+      "createdBy": "Huismeester 2",
+      "updatedBy": "Huismeester 2",
+      "archivedAt": ""
+    }
+  ],
+  "Meldingshistorie": [
+    {
+      "historie_id": "MH-001",
+      "melding_id": "M-2026-0042",
+      "actie": "AANGEMAAKT",
+      "details": "Melding ingediend via publiek portaal (/melden).",
+      "tijdstip": "2026-10-26 08:30",
+      "actor": "Dhr. Bakker (Bewoner)"
+    },
+    {
+      "historie_id": "MH-002",
+      "melding_id": "M-2026-0042",
+      "actie": "BEOORDEELD",
+      "details": "Melding beoordeeld ter plaatse. Dranger loopt stroef.",
+      "tijdstip": "2026-10-26 09:15",
+      "actor": "Huismeester 1"
+    },
+    {
+      "historie_id": "MH-003",
+      "melding_id": "M-2026-0042",
+      "actie": "KANBAN_KOPPELING",
+      "details": "Gekoppelde actie ACT-001 aangemaakt op Kanban-bord.",
+      "tijdstip": "2026-10-26 09:40",
+      "actor": "Huismeester 1"
+    },
+    {
+      "historie_id": "MH-004",
+      "melding_id": "M-2026-0042",
+      "actie": "WERKORDER",
+      "details": "Werkorder WO-2026-014 uitgezet naar Firma Jansen Deurtechniek BV. Status naar 'Ingepland'.",
+      "tijdstip": "2026-10-26 10:10",
+      "actor": "Huismeester 1"
+    },
+    {
+      "historie_id": "MH-005",
+      "melding_id": "M-2026-0041",
+      "actie": "AANGEMAAKT",
+      "details": "Melding geconstateerd tijdens avondronde.",
+      "tijdstip": "2026-10-25 16:45",
+      "actor": "Huismeester 1"
+    },
+    {
+      "historie_id": "MH-006",
+      "melding_id": "M-2026-0041",
+      "actie": "STATUSWIJZIGING",
+      "details": "Nieuwe voorschakelapparaten uit magazijn gehaald. Status naar 'In uitvoering'.",
+      "tijdstip": "2026-10-26 08:00",
+      "actor": "Huismeester 1"
+    },
+    {
+      "historie_id": "MH-007",
+      "melding_id": "M-2026-0040",
+      "actie": "AANGEMAAKT",
+      "details": "Mondelinge melding van Mw. Van Dijk genoteerd.",
+      "tijdstip": "2026-10-24 11:20",
+      "actor": "Huismeester 2"
+    },
+    {
+      "historie_id": "MH-008",
+      "melding_id": "M-2026-0040",
+      "actie": "BEOORDEELD",
+      "details": "Kelder geïnspecteerd. Geen acute nood, wel inspectie door specialist nodig.",
+      "tijdstip": "2026-10-24 14:00",
+      "actor": "Huismeester 2"
+    },
+    {
+      "historie_id": "MH-009",
+      "melding_id": "M-2026-0040",
+      "actie": "STATUSWIJZIGING",
+      "details": "Offerte opgevraagd bij De Boer. Wachtreden ingesteld: 'Wacht op leverancier'.",
+      "tijdstip": "2026-10-25 10:00",
+      "actor": "Bestuur"
+    },
+    {
+      "historie_id": "MH-010",
+      "melding_id": "M-2026-0039",
+      "actie": "AANGEMAAKT",
+      "details": "Melding ingezonden via /melden.",
+      "tijdstip": "2026-10-26 07:15",
+      "actor": "Fam. Willems (Bewoner)"
+    },
+    {
+      "historie_id": "MH-011",
+      "melding_id": "M-2026-0038",
+      "actie": "AANGEMAAKT",
+      "details": "Melding via WhatsApp binnengekomen.",
+      "tijdstip": "2026-10-23 09:00",
+      "actor": "Huismeester 2"
+    },
+    {
+      "historie_id": "MH-012",
+      "melding_id": "M-2026-0038",
+      "actie": "ONDERHOUD",
+      "details": "Muur gereinigd met hogedrukspuit en milieuvriendelijke reiniger.",
+      "tijdstip": "2026-10-24 13:30",
+      "actor": "Huismeester 2"
+    },
+    {
+      "historie_id": "MH-013",
+      "melding_id": "M-2026-0038",
+      "actie": "AFSLUITING",
+      "details": "Gecontroleerd en melding afgesloten met status 'Gesloten'.",
+      "tijdstip": "2026-10-25 15:00",
+      "actor": "Huismeester 2"
+    },
+    {
+      "historie_id": "MH-4f42f7",
+      "melding_id": "M-2026-0045",
+      "actie": "AANGEMAAKT",
+      "details": "Melding geregistreerd via Publiek portaal",
+      "tijdstip": "2026-10-26T06:24:28Z",
+      "actor": "M. Jansen (14C)"
+    }
+  ],
+  "Werkorders": [
+    {
+      "id": "WO-2026-014",
+      "melding_id": "M-2026-0042",
+      "leverancier": "Firma Jansen Deurtechniek BV",
+      "geplande_datum": "2026-11-03",
+      "geschatte_kosten": 320,
+      "instructie": "Magneetsluiting afstellen en dranger veerspanning controleren.",
+      "status": "Ingepland",
+      "recordVersion": 1,
+      "createdAt": "2026-10-26T10:10:00Z",
+      "updatedAt": "2026-10-26T10:10:00Z",
+      "createdBy": "Huismeester 1",
+      "updatedBy": "Huismeester 1"
+    },
+    {
+      "id": "WO-2026-012",
+      "melding_id": "M-2026-0040",
+      "leverancier": "Loodgietersbedrijf De Boer Velp",
+      "geplande_datum": "2026-11-06",
+      "geschatte_kosten": 450,
+      "instructie": "Inspectie standleiding met camera en lekkage verhelpen.",
+      "status": "Aangevraagd",
+      "recordVersion": 1,
+      "createdAt": "2026-10-25T10:00:00Z",
+      "updatedAt": "2026-10-25T10:00:00Z",
+      "createdBy": "Bestuur",
+      "updatedBy": "Bestuur"
+    }
+  ],
+  "Verwerkingen": [],
+  "Foutenlog": []
+}
